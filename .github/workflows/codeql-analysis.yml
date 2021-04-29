@@ -77,7 +77,7 @@ jobs:
       uses: github/codeql-action/analyze@v1
 
     - name: Fail Github Action
-    - uses: actions/github-script@v3
+      uses: actions/github-script@v3
       with:
         script: |
           core.setFailed('Action failed')
