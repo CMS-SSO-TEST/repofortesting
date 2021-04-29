@@ -76,8 +76,6 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
 
-    - name: Fail Github Action
-      uses: actions/github-script@v3
-      with:
-        script: |
-          core.setFailed('Action failed')
+    - run: |
+       cat /home/runner/work/repofortesting/results/java-builtin.sarif
+       if [ "\$?" -eq 0 ]; then exit 1; fi
