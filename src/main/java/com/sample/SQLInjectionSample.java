@@ -36,8 +36,8 @@ public class SQLInjectionSample {
         while(rs.next()) {
             accountDTOS.add(new AccountDTO());
         }
-      }
         return accountDTOS;
+      }
     }
 
 }
