@@ -13,7 +13,7 @@ public class SQLInjectionSample {
     DataSource dataSource;
     private String url = "jdbc:mysql://localhost/test";
     private String username = "root";
-    private String password = "";
+    private String password = "root1234";
 
 
     private Connection getConn() throws SQLException {
