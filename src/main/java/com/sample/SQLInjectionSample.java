@@ -12,8 +12,8 @@ public class SQLInjectionSample {
 
     DataSource dataSource;
     private String url = "jdbc:mysql://localhost/test";
-    private String username = "";
-    private String password = "";
+    private String username = "root";
+    private String password = "root1234";
 
 
     private Connection getConn() throws SQLException {
@@ -30,14 +30,11 @@ public class SQLInjectionSample {
                 + customerId
                 + "'";
         Connection c = getConn();
-        ResultSet rs = c.createStatement().executeQuery(sql); {
-        //try (Statement stmt = c.createStatement();
-			//ResultSet rs = stmt.executeQuery(sql)) {
+        ResultSet rs = c.createStatement().executeQuery(sql);
         while(rs.next()) {
             accountDTOS.add(new AccountDTO());
         }
         return accountDTOS;
-	//}
     }
 
 }
