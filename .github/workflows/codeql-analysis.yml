@@ -37,14 +37,7 @@ jobs:
         # Learn more:
         # https://docs.github.com/en/free-pro-team@latest/github/finding-security-vulnerabilities-and-errors-in-your-code/configuring-code-scanning#changing-the-languages-that-are-analyzed
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
-      with:
-        languages: ${{ matrix.language }}
-        config-file: ./.github/codeql-config.yml
-    # Specify the container in which actions will run
-    container:
-      image: gradle:latest
+
 
     steps:
     - name: Checkout repository
@@ -56,15 +49,16 @@ jobs:
     #   if: ${{ github.event_name == 'pull_request' }}
 
     # Initializes the CodeQL tools for scanning.
-    # - name: Initialize CodeQL
-    #   uses: github/codeql-action/init@v1
-    #   with:
-    #     languages: ${{ matrix.language }}
-    #     config-file: ./.github/codeql-config.yml
-        # If you wish to specify custom queries, you can do so here or in a config file.
-        # By default, queries listed here will override any specified in a config file.
-        # Prefix the list here with "+" to use these queries and those in the config file.
-        # queries: ./path/to/local/query, your-org/your-repo/queries@main
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v1
+      with:
+        languages: ${{ matrix.language }}
+        config-file: ./.github/codeql-config.yml
+
+    # If you wish to specify custom queries, you can do so here or in a config file.
+    # By default, queries listed here will override any specified in a config file.
+    # Prefix the list here with "+" to use these queries and those in the config file.
+    # queries: ./path/to/local/query, your-org/your-repo/queries@main
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
@@ -88,20 +82,15 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
-      with:
-        output: ./scan-results
 
-    # Custom conditions to pass/fail github actions
-    # The "-e" argument instructs jq to return a non-zero exit code if the filter returns no results.
-    # In this case, if it finds results (aka vulnerabilities), then it returns a 0 exit code which is subsequently checked in
-    # the if conditional with the "$?" variable; thus you can "exit 1" the job and it will fail the Action.
+    # Specify the container in which actions will run
+    container:
+      image: gradle:latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
     - run: |
-        apt-get update && apt-get install -y jq
-        ls -al ./scan-results
-        set +e
-        cat ./scan-results/java-builtin.sarif | jq -e '.runs[0].results | select(length > 0)'
-        if [ "$?" -eq 0 ]
-        then
-        echo "Vulnerabilities detected. Failing the action"
-        exit 1
-        fi
+       chmod +x gradlew
+       ./gradlew build
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
