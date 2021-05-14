@@ -30,11 +30,12 @@ public class SQLInjectionSample {
                 + customerId
                 + "'";
         Connection c = getConn();
-        ResultSet rs = c.createStatement().executeQuery(sql);
+        ResultSet rs = c.createStatement().executeQuery(sql); {
         while(rs.next()) {
             accountDTOS.add(new AccountDTO());
         }
         return accountDTOS;
+      }
     }
 
 }
