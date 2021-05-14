@@ -13,7 +13,7 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ main, develop, 'dev-**' ]
+    branches: [ main, develop, 'dev-**', default ]
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ main ]
@@ -66,12 +66,12 @@ jobs:
     #- name: Autobuild
     #  uses: github/codeql-action/autobuild@v1
 
-    # ℹ️ Command-line programs to run using the OS shell.
-    # 📚 https://git.io/JvXDl
+    # Command-line programs to run using the OS shell.
+    # https://git.io/JvXDl
 
-    # ✏️ If the Autobuild fails above, remove it and uncomment the following three lines
-    #    and modify them (or add more) to build your code if your project
-    #    uses a compiled language
+    # If the Autobuild fails above, remove it and uncomment the following three lines
+    # and modify them (or add more) to build your code if your project
+    # uses a compiled language
 
     - run: |
        chmod +x gradlew
@@ -86,6 +86,10 @@ jobs:
       with:
         output: ./scan-results
 
+    # Custom conditions to pass/fail github actions
+    # The "-e" argument instructs jq to return a non-zero exit code if the filter returns no results.
+    # In this case, if it finds results (aka vulnerabilities), then it returns a 0 exit code which is subsequently checked in
+    # the if conditional with the "$?" variable; thus you can "exit 1" the job and it will fail the Action.
     - run: |
         apt-get update && apt-get install -y jq
         ls -al ./scan-results
