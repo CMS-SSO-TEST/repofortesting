@@ -18,7 +18,7 @@ public class ComplexityCode {
         this.isValid = isValid;
     }
 
-    //####Vulnerable Code#####
+    //////####Vulnerable Code#####//////
     // public String hello() {
     //     if (id == 0 && name == "dummy" && Boolean.valueOf(description) == false && isValid) {
     //         return "it will work all fine";
@@ -28,7 +28,7 @@ public class ComplexityCode {
     //         return "it has to be valid for me to work";
     //     }
 
-    //####Fixed Code####
+    //////####Fixed Code####//////
     public String hello() {
         if (id == 0 && name.equals("dummy") && Boolean.valueOf(description) == false && isValid) {
             return "it will work all fine";

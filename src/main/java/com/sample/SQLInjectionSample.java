@@ -31,13 +31,20 @@ public class SQLInjectionSample {
                 + customerId
                 + "'";
         Connection c = getConn();
-        //ResultSet rs = c.createStatement().executeQuery(sql);
+
+        //////####Vulnerable Code#####//////
+        // ResultSet rs = c.createStatement().executeQuery(sql);
+        // while(rs.next()) {
+        //     accountDTOS.add(new AccountDTO());
+        // }
+
+        //////####Fixed Code#####//////
         try (Statement stmt = c.createStatement()) {
           ResultSet rs = stmt.executeQuery(sql);
         while(rs.next()) {
             accountDTOS.add(new AccountDTO());
+          }
         }
-      }
         return accountDTOS;
     }
 }
