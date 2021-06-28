@@ -84,3 +84,20 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
+      with:
+        output: ./scan-results
+
+    # Custom conditions to pass/fail github actions
+    # The "-e" argument instructs jq to return a non-zero exit code if the filter returns no results.
+    # In this case, if it finds results (aka vulnerabilities), then it returns a 0 exit code which is subsequently checked in
+    # the if conditional with the "$?" variable; thus you can "exit 1" the job and it will fail the Action.
+    - run: |
+        apt-get update && apt-get install -y jq
+        ls -al ./scan-results
+        set +e
+        cat ./scan-results/java-builtin.sarif | jq -e '.runs[0].results | select(length > 0)'
+        if [ "$?" -eq 0 ]
+        then
+        echo "Vulnerabilities detected. Failing the action"
+        exit 1
+        fi
